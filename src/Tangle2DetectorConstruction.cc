@@ -12,6 +12,7 @@
 // * limitation of liability.                                        *
 // *******************************************************************
 
+// Modified to include plastic used in JPET bz Marin Mlinarevic (5June 2018)
 #include "Tangle2DetectorConstruction.hh"
 #include "Tangle2Data.hh"
 
@@ -50,7 +51,21 @@ void Tangle2DetectorConstruction::DefineMaterials()
   G4double a; // mass of a mole
   G4double z; // mean number of protons
   G4String name, symbol;
+  G4int ncomponents, natoms;
+  G4double fractionmass;
 
+  a=1.00794*g/mole;
+  G4Element*  elH = new G4Element(name="Hydrogen",
+				  symbol="H",
+				  z=1., a);
+  a=12.0107*g/mole;
+  G4Element*  elC = new G4Element(name="Carbon",
+				  symbol="C",
+				  z=6., a);
+  a=14.00674*g/mole;
+  G4Element*  elN = new G4Element(name="Nitrogen",
+				  symbol="N",
+				  z=7., a);
   a=16.00*g/mole;
   G4Element*  elO = new G4Element(name="Oxygen",
 				  symbol="O",
@@ -76,6 +91,7 @@ void Tangle2DetectorConstruction::DefineMaterials()
   G4Material* LSO;
   G4Material* lead;
   G4Material* LYSO;
+  G4Material* JPET_plastic;
   
   G4double density = 7.4*g/cm3;
   LSO = new G4Material("Lu2SiO5",   
@@ -92,7 +108,7 @@ void Tangle2DetectorConstruction::DefineMaterials()
   LSO->AddElement(elSi, 1);
   LSO->AddElement(elLu, 2);
   LSO->AddElement(elO , 5);
-
+  
   //Add elements for material "Lu2Y2SiO5"
   LYSO->AddElement(elSi, 7*perCent);
   LYSO->AddElement(elLu, 71*perCent);
@@ -106,6 +122,31 @@ void Tangle2DetectorConstruction::DefineMaterials()
   
   lead->AddElement(elPb, 1);
   
+  //Define plastic used in JPET detectors
+  //(plastic scintillator, prepared from styrene doped with
+  //2 wt% of 2,5-diphenylbenzoxazole and 0.03 wt% of 2-(4-styrylphenyl)benzoxazole)
+  G4NistManager* man = G4NistManager::Instance();
+  G4Material* polystyrene  = man->FindOrBuildMaterial("G4_POLYSTYRENE");
+  G4double density_polystyrene = 1.06*g/cm3; //from Geant4 Material Database
+  
+  G4Material* diphenylbenzoxazole = new G4Material(name="2,5-diphenylbenzoxazole", density, ncomponents=4);
+  diphenylbenzoxazole->AddElement(elC, natoms=19);
+  diphenylbenzoxazole->AddElement(elH, natoms=11);  // 2 H subtracted because part of polymer chain
+  diphenylbenzoxazole->AddElement(elN, natoms=1);
+  diphenylbenzoxazole->AddElement(elO, natoms=1);
+
+  G4Material* styrylphenylbenzoxazole = new G4Material(name="2-(4-styrylphenyl)benzoxazole", density, ncomponents=4);
+  styrylphenylbenzoxazole->AddElement(elC, natoms=21);
+  styrylphenylbenzoxazole->AddElement(elH, natoms=13);
+  styrylphenylbenzoxazole->AddElement(elN, natoms=1);
+  styrylphenylbenzoxazole->AddElement(elO, natoms=1);
+  
+  JPET_plastic = new G4Material(name="JPET_plastic", density_polystyrene, ncomponents=3);
+  JPET_plastic->AddMaterial(polystyrene, fractionmass=97.97*perCent);
+  JPET_plastic->AddMaterial(diphenylbenzoxazole, fractionmass=2.0*perCent);
+  JPET_plastic->AddMaterial(styrylphenylbenzoxazole, fractionmass= 0.03*perCent);
+
+  
   // Dump the Table of registered materials 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
@@ -117,8 +158,10 @@ G4VPhysicalVolume* Tangle2DetectorConstruction::Construct()
   
   // Crystal full dimensions
   G4double cryst_dX = 22*mm, cryst_dY = 4*mm, cryst_dZ = 4*mm;
-
-  G4Material* cryst_mat   = nist->FindOrBuildMaterial("Lu2Y2SiO5");
+  
+  // Put name of material to use here
+  G4Material* cryst_mat   = nist->FindOrBuildMaterial("JPET_plastic");
+  //G4Material* cryst_mat   = nist->FindOrBuildMaterial("Lu2Y2SiO5");
   
   G4double ringDiameter = 60.*mm;
   

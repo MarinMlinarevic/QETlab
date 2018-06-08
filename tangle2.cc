@@ -41,15 +41,15 @@ int main(int argc,char** argv)
   //--------------------------
   // Beam
 
-  // A - axis
+  // A - axis - photons emitted along x-axis if true or in random directions if false; must be false if positrons is true
   Tangle2::fixedAxis = false;
   
-  // B - beam particle
-  Tangle2::positrons = false;
+  // B - beam particle - entagled photons produced by positron annihilation if true, unentangled back-to-back photons if false
+  Tangle2::positrons = true;
   
-  // polarisation direction
-  Tangle2::perpPol   = false;
-  Tangle2::polYZ     = false;
+  // polarisation direction; perpPol must be false if positrons is true
+  Tangle2::perpPol   = false;  //determines whether polarisation is orthogonal or random for back-to-back photons
+  Tangle2::polYZ     = false;  //for use with fixed beam in x direction; if true, one photon is y-polarised and the other z-polarised
 
   // C - polarised/unpolarised Compton scattering
   G4bool  usePolarisedCompton = true;
@@ -58,7 +58,7 @@ int main(int argc,char** argv)
   // Detector 
   // True: arrays 90 cm apart (45 cm from source)  
   // False: arrays 6 cm apart (3 cm from source)  
-  Tangle2::fullPET   = true;
+  Tangle2::fullPET   = false;
 
   // Do this first to capture all output
   G4UIExecutive* ui = nullptr;

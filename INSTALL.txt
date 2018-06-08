@@ -1,17 +1,24 @@
 
-tangle2  John Allison  May 2017
+tangle2/INSTALL.txt  John Allison  May 2017
 
 This is a standard Geant4 application - see Geant4 Application Developers Guide,
 Section 2.8. How to Make an Executable Program.
 
 Make sure it runs with your installed Geant4 libraries.
 
-Copy special versions of some Geant4 source files into your Geant4 source tree:
+Copy special versions of some Geant4 source files into your Geant4 source tree.
+
+Note: There’s a flag
+#define G4EPLUSANNIHILATIONENTANGLEMENT
+at G4LivermorePolarizedComptonModel.cc: 56 that can be commented out to suppress entanglement.  Ultimately entanglement should simply be there, with no option to suppress, since entanglement is the physical reality.
+
+# Tailor these to your own directory structure:
 g4source=/Users/johna/Geant4/dev/geant4/source
 changes=/Users/johna/Geant4/Entanglement/tangle2/geant4.10.3-changes
-cp $changes/track/sources.cmake $g4source/track
-cp $changes/track/include/G4EntanglementAuxInfo.hh $g4source/track/include
-cp $changes/track/include/G4VEntanglementClipBoard.hh $g4source/track/include
+
+cp $changes/processes/sources.cmake $g4source/processes/management
+cp $changes/processes/include/G4EntanglementAuxInfo.hh $g4source/processes/management/include
+cp $changes/processes/include/G4VEntanglementClipBoard.hh $g4source/processes/management/include
 cp $changes/processes/sources.cmake $g4source/processes/electromagnetic/standard
 cp $changes/processes/include/G4eplusAnnihilationEntanglementClipBoard.hh $g4source/processes/electromagnetic/standard/include
 cp $changes/processes/src/G4eplusAnnihilation.cc $g4source/processes/electromagnetic/standard/src
@@ -80,9 +87,9 @@ Index: G4eplusAnnihilation.cc
 
 The following is for advanced developers who want to copy changes in the Geant4
 source tree back into tangle2, with a view to updating the git repository.
-cp $g4source/track/sources.cmake $changes/track
-cp $g4source/track/include/G4EntanglementAuxInfo.hh $changes/track/include
-cp $g4source/track/include/G4VEntanglementClipBoard.hh $changes/track/include
+cp $g4source/processes/management/sources.cmake $changes/processes
+cp $g4source/processes/management/include/G4EntanglementAuxInfo.hh $changes/processes/include
+cp $g4source/processes/management/include/G4VEntanglementClipBoard.hh $changes/processes/include
 cp $g4source/processes/electromagnetic/standard/sources.cmake $changes/processes
 cp $g4source/processes/electromagnetic/standard/include/G4eplusAnnihilationEntanglementClipBoard.hh $changes/processes/include
 cp $g4source/processes/electromagnetic/standard/src/G4eplusAnnihilation.cc $changes/processes/src
