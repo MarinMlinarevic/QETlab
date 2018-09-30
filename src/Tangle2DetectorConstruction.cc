@@ -128,6 +128,7 @@ void Tangle2DetectorConstruction::DefineMaterials()
   G4NistManager* man = G4NistManager::Instance();
   G4Material* polystyrene  = man->FindOrBuildMaterial("G4_POLYSTYRENE");
   G4double density_polystyrene = 1.06*g/cm3; //from Geant4 Material Database
+  G4double high_density = 1060*g/cm3; //from Geant4 Material Database
   
   G4Material* diphenylbenzoxazole = new G4Material(name="2,5-diphenylbenzoxazole", density, ncomponents=4);
   diphenylbenzoxazole->AddElement(elC, natoms=19);
@@ -141,12 +142,18 @@ void Tangle2DetectorConstruction::DefineMaterials()
   styrylphenylbenzoxazole->AddElement(elN, natoms=1);
   styrylphenylbenzoxazole->AddElement(elO, natoms=1);
   
+  // JPET plastic
   JPET_plastic = new G4Material(name="JPET_plastic", density_polystyrene, ncomponents=3);
   JPET_plastic->AddMaterial(polystyrene, fractionmass=97.97*perCent);
   JPET_plastic->AddMaterial(diphenylbenzoxazole, fractionmass=2.0*perCent);
   JPET_plastic->AddMaterial(styrylphenylbenzoxazole, fractionmass= 0.03*perCent);
 
-  
+  //JPET plastic with 1000 times higher density
+  hd_plastic = new G4Material(name="JPET_plastic", high_density, ncomponents=3);
+  hd_plastic->AddMaterial(polystyrene, fractionmass=97.97*perCent);
+  hd_plastic->AddMaterial(diphenylbenzoxazole, fractionmass=2.0*perCent);
+  hd_plastic->AddMaterial(styrylphenylbenzoxazole, fractionmass= 0.03*perCent);
+
   // Dump the Table of registered materials 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
@@ -160,7 +167,9 @@ G4VPhysicalVolume* Tangle2DetectorConstruction::Construct()
   G4double cryst_dX = 22*mm, cryst_dY = 4*mm, cryst_dZ = 4*mm;
   
   // Put name of material to use here
-  G4Material* cryst_mat   = nist->FindOrBuildMaterial("JPET_plastic");
+  //G4Material* cryst_mat   = nist->FindOrBuildMaterial("JPET_plastic");
+  G4Material* cryst_mat   = nist->FindOrBuildMaterial("hd_plastic");
+  //G4Material* cryst_mat   = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
   //G4Material* cryst_mat   = nist->FindOrBuildMaterial("Lu2Y2SiO5");
   
   G4double ringDiameter = 60.*mm;
