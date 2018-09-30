@@ -149,7 +149,7 @@ void Tangle2DetectorConstruction::DefineMaterials()
   JPET_plastic->AddMaterial(styrylphenylbenzoxazole, fractionmass= 0.03*perCent);
 
   //JPET plastic with 1000 times higher density
-  hd_plastic = new G4Material(name="JPET_plastic", high_density, ncomponents=3);
+  hd_plastic = new G4Material(name="hd_plastic", high_density, ncomponents=3);
   hd_plastic->AddMaterial(polystyrene, fractionmass=97.97*perCent);
   hd_plastic->AddMaterial(diphenylbenzoxazole, fractionmass=2.0*perCent);
   hd_plastic->AddMaterial(styrylphenylbenzoxazole, fractionmass= 0.03*perCent);
