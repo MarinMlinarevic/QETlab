@@ -12,7 +12,7 @@
 // * limitation of liability.                                        *
 // *******************************************************************
 
-// Modified to include plastic used in JPET bz Marin Mlinarevic (5June 2018)
+// Modified to include plastic used in JPET by Marin Mlinarevic (5June 2018)
 #include "Tangle2DetectorConstruction.hh"
 #include "Tangle2Data.hh"
 
@@ -92,6 +92,7 @@ void Tangle2DetectorConstruction::DefineMaterials()
   G4Material* lead;
   G4Material* LYSO;
   G4Material* JPET_plastic;
+  G4Material* hd_plastic;
   
   G4double density = 7.4*g/cm3;
   LSO = new G4Material("Lu2SiO5",   
