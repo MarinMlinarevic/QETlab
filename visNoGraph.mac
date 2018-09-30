@@ -18,11 +18,14 @@
 # 100 million
 #/run/beamOn 100000000
 
+# 200 million
+/run/beamOn 100000000
+
 # 400 million
 #/run/beamOn 400000000
 
 # 500 million
-/run/beamOn 500000000
+#/run/beamOn 500000000
 
 # 1 billion
 #/run/beamOn 1000000000
